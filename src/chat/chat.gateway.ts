@@ -34,4 +34,9 @@ import {
     async identity(@MessageBody() data: number): Promise<number> {
       return data;
     }
+
+    teste(args){
+      this.server.emit('evento que eu quero', args)
+    }
+  
   }
