@@ -16,7 +16,9 @@ import { Inject, Injectable } from '@nestjs/common';
   cors: {
     origin: '*',
   },
-})
+})  
+
+
 
 @Injectable()
 export class ChatGateway {
