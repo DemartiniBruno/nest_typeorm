@@ -8,6 +8,7 @@ export class VendasService {
     constructor(
         @Inject('VENDAS_REPOSITORY')
         private readonly vendasRepository: Repository<Vendas>,
+        // private readonly gateway: ChatGateway
     ) {}
 
     async findAllVendas(): Promise<Vendas[]> {
@@ -20,6 +21,7 @@ export class VendasService {
             value: body.value
         })
 
+        // this.gateway.newVenda(createdVenda)
         //Aqui depois que criar deve chamar a função do socket para enviar um evento
 
         return createdVenda;
