@@ -26,6 +26,10 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'value', nullable: false }),
     __metadata("design:type", Number)
 ], Vendas.prototype, "value", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'status', default: 0 }),
+    __metadata("design:type", Number)
+], Vendas.prototype, "status", void 0);
 exports.Vendas = Vendas = __decorate([
     (0, typeorm_1.Entity)({ name: 'vendas' })
 ], Vendas);

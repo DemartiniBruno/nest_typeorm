@@ -11,6 +11,15 @@ export class VendasService {
         // private readonly gateway: ChatGateway
     ) {}
 
+    async findVenda(@Body() body): Promise<Vendas>{
+        const venda = await this.vendasRepository.findOne({
+            where:{
+                id: body
+            }
+        })
+        return venda
+    }
+
     async findAllVendas(): Promise<Vendas[]> {
         return this.vendasRepository.find();
     }
@@ -25,6 +34,14 @@ export class VendasService {
         //Aqui depois que criar deve chamar a função do socket para enviar um evento
 
         return createdVenda;
+    }
+
+    async updateVenda(@Body() body): Promise<Vendas> {
+          const updatedVenda = await this.vendasRepository.update(body, {
+            status: 1,
+        })
+
+        return await this.findVenda(body)
     }
 
 }

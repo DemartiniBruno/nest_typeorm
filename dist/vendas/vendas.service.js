@@ -19,6 +19,14 @@ let VendasService = class VendasService {
     constructor(vendasRepository) {
         this.vendasRepository = vendasRepository;
     }
+    async findVenda(body) {
+        const venda = await this.vendasRepository.findOne({
+            where: {
+                id: body
+            }
+        });
+        return venda;
+    }
     async findAllVendas() {
         return this.vendasRepository.find();
     }
@@ -29,6 +37,12 @@ let VendasService = class VendasService {
         });
         return createdVenda;
     }
+    async updateVenda(body) {
+        const updatedVenda = await this.vendasRepository.update(body, {
+            status: 1,
+        });
+        return await this.findVenda(body);
+    }
 };
 exports.VendasService = VendasService;
 __decorate([
@@ -36,7 +50,19 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
+], VendasService.prototype, "findVenda", null);
+__decorate([
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
 ], VendasService.prototype, "createVenda", null);
+__decorate([
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], VendasService.prototype, "updateVenda", null);
 exports.VendasService = VendasService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)('VENDAS_REPOSITORY')),

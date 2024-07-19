@@ -10,4 +10,7 @@ export class Vendas {
 
     @Column({name:'value', nullable:false})
     value: number;
+
+    @Column({name:'status', default:0})
+    status: number;
 }

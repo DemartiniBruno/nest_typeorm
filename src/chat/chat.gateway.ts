@@ -1,5 +1,7 @@
 import {
   MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -10,7 +12,7 @@ import { map } from 'rxjs/operators';
 import { Server } from 'socket.io';
 import { VendasService } from 'src/vendas/vendas.service';
 import { ChatService } from './chat.service';
-import { Inject, Injectable } from '@nestjs/common';
+import { Body, Inject, Injectable } from '@nestjs/common';
 
 @WebSocketGateway(8085, {
   cors: {
@@ -19,36 +21,35 @@ import { Inject, Injectable } from '@nestjs/common';
 })  
 
 
-
 @Injectable()
-export class ChatGateway {
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
   constructor(
-    private vendasService: ChatService
+    private chatService: ChatService,
+    private vendasService: VendasService
   ) {}
 
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('message')
-  handleMessage(@MessageBody() message: string): void {
-    console.log(message)
-    this.server.emit('message', message);
+
+  async handleConnection(client: any, ...args: any[]) {
+    console.log('conectado')
+    // console.log(await this.vendasService.findAllVendas())
   }
 
-  @SubscribeMessage('events')
-  findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
-    console.log(data)
-    return from([1, 2, 3]).pipe(map(item => ({ event: 'events', data: item })));
+  handleDisconnect(client: any) {
+    console.log('desconectado')
   }
 
-  @SubscribeMessage('identity')
-  async identity(@MessageBody() data: number): Promise<number> {
-    this.vendasService.teste()
-    return data;
+  @SubscribeMessage('newVenda')
+  async newVenda(@Body() body) {
+    const createdVenda = await this.vendasService.createVenda(body)
+    this.server.emit('newVenda', createdVenda);
   }
 
-  newVenda(args) {
-    this.server.emit('newVenda', args)
+  @SubscribeMessage('vendaProcessada')
+  async vendaProcessada(@Body() body) {
+    const updatedVenda = await this.vendasService.updateVenda(body);
+    console.log(updatedVenda)
   }
-
 }

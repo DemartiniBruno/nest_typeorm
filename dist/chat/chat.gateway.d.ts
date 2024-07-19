@@ -1,13 +1,14 @@
-import { WsResponse } from '@nestjs/websockets';
-import { Observable } from 'rxjs';
+import { OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server } from 'socket.io';
+import { VendasService } from 'src/vendas/vendas.service';
 import { ChatService } from './chat.service';
-export declare class ChatGateway {
+export declare class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+    private chatService;
     private vendasService;
-    constructor(vendasService: ChatService);
+    constructor(chatService: ChatService, vendasService: VendasService);
     server: Server;
-    handleMessage(message: string): void;
-    findAll(data: any): Observable<WsResponse<number>>;
-    identity(data: number): Promise<number>;
-    newVenda(args: any): void;
+    handleConnection(client: any, ...args: any[]): Promise<void>;
+    handleDisconnect(client: any): void;
+    newVenda(body: any): Promise<void>;
+    vendaProcessada(body: any): Promise<void>;
 }

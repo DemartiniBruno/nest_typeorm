@@ -1,21 +1,52 @@
 <html>
-  <head>
-    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
-    <script>
-      const socket = io('http://localhost:8085');
-      socket.on('connect', function() {
-        console.log('Connected');
 
-        socket.emit('identity')
-        
-        socket.on ('newVenda', (args)=>{
-          console.log(args)
-        })
+<head>
 
-      });
+</head>
 
-    </script>
-  </head>
+<body>
 
-  <body></body>
+  <form action="">
+    <input id="desc" type="text">
+    <input id="valor" type="number">
+    <button id="btn">teste</button>
+  </form>
+
+
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+    integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+    crossorigin="anonymous"></script>
+  <script>
+    // const venda = {
+    //   description: "Venda de teste2",
+    //   value: 200
+    // }
+    const button = document.getElementById('btn')
+
+    const socket = io('http://192.168.3.221:8085');
+    socket.on('connect', function () {
+      console.log('Connected');
+
+      socket.emit('identity')
+
+      socket.on('newVenda', (venda)=>{
+        console.log(venda)
+      })
+    });
+
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      const description = document.getElementById('desc').value
+      const valor = document.getElementById('valor').value
+
+      e.preventDefault
+      socket.emit('newVenda', ({
+        description: description,
+        value: valor
+      }))
+    })
+
+  </script>
+</body>
+
 </html>
